@@ -1,0 +1,42 @@
+{
+  "PLOTS_TOTAL": 90,
+  "FARMER_BASE_COST": 50,
+  "MUSIC_URL": "",
+  
+  "FARMER_CONFIG": [
+  { "level": 1, "cost": 500, "speedMultiplier": 0.1, "maxSeedLevel": 1 },
+  { "level": 2, "cost": 1000, "speedMultiplier": 0.2, "maxSeedLevel": 2 },
+  { "level": 3, "cost": 2500, "speedMultiplier": 0.4, "maxSeedLevel": 3 },
+  { "level": 4, "cost": 5000, "speedMultiplier": 0.6, "maxSeedLevel": 5 },
+  
+  { "level": 5, "cost": 10000, "speedMultiplier": 1.0, "maxSeedLevel": 8 },
+  { "level": 6, "cost": 10000, "speedMultiplier": 2, "maxSeedLevel": 10 },
+  { "level": 7, "cost": 10000, "speedMultiplier": 3, "maxSeedLevel": 12 },
+  { "level": 8, "cost": 10000, "speedMultiplier": 4, "maxSeedLevel": 14 },
+  { "level": 9, "cost": 10000, "speedMultiplier": 5, "maxSeedLevel": 16 },
+  { "level": 10, "cost": 10000, "speedMultiplier": 6, "maxSeedLevel": 18 },
+  { "level": 11, "cost": 10000, "speedMultiplier": 7, "maxSeedLevel": 18 },
+  { "level": 12, "cost": 10000, "speedMultiplier": 8, "maxSeedLevel": 18 }
+],
+  
+"SEEDS": [
+    { "id": "wheat", "name": "Trigo", "icon": "🌾", "cost": 10, "time": 8000, "reward": 25, "level": 1, "farmerLvl": 1 },
+    { "id": "carrot", "name": "Zanahoria", "icon": "🥕", "cost": 20, "time": 12000, "reward": 45, "level": 2, "farmerLvl": 1 },
+    { "id": "tomato", "name": "Tomate", "icon": "🍅", "cost": 35, "time": 18000, "reward": 80, "level": 3, "farmerLvl": 1 },
+    { "id": "corn", "name": "Maíz", "icon": "🌽", "cost": 50, "time": 25000, "reward": 120, "level": 5, "farmerLvl": 1 },
+    
+    { "id": "bellpepper", "name": "Pimiento", "icon": "🌶️", "cost": 75, "time": 30000, "reward": 180, "level": 7, "farmerLvl": 1 },
+    { "id": "cabbage", "name": "Col", "icon": "🥬", "cost": 125, "time": 45000, "reward": 300, "level": 9, "farmerLvl": 1 },
+    
+    { "id": "pumpkin", "name": "Calabaza", "icon": "🎃", "cost": 150, "time": 40000, "reward": 350, "level": 10, "farmerLvl": 1 },
+    { "id": "eggplant", "name": "Berenjena", "icon": "🍆", "cost": 200, "time": 50000, "reward": 450, "level": 12, "farmerLvl": 1 },
+    
+    { "id": "pineapple", "name": "Piña", "icon": "🍍", "cost": 300, "time": 60000, "reward": 600, "level": 14, "farmerLvl": 1 },
+    { "id": "avacado", "name": "Aguacate", "icon": "🥑", "cost": 400, "time": 75000, "reward": 800, "level": 16, "farmerLvl": 1 },
+    
+    { "id": "watermelon", "name": "Sandía", "icon": "🍉", "cost": 500, "time": 90000, "reward": 1000, "level": 18, "farmerLvl": 1 },
+
+    { "id": "Dorado", "name": "Oro", "icon": "🪙", "cost": 1000, "time": 120000, "reward": 5000, "level": 16, "farmerLvl": 1 }
+
+  ]
+}

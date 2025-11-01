@@ -1,0 +1,284 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+    min-height: 100vh;
+    padding: 15px;
+    color: #5D4037;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff8e1;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    overflow: hidden;
+    border: 4px solid #8BC34A;
+}
+
+header {
+    background: linear-gradient(to right, #4CAF50, #8BC34A);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 2.2em;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    position: relative;
+    /* FLEXBOX para alinear los controles del header */
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+}
+
+.farmer {
+    position: absolute;
+    left: 20px;
+    font-size: 1.5em;
+    animation: walk 10s infinite linear;
+}
+
+@keyframes walk {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(calc(100vw - 120px)); }
+    100% { transform: translateX(0); }
+}
+
+.music-toggle, .notify-toggle {
+    position: relative; 
+    font-size: 0.5em;
+    background: #FF9800;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    order: 3; /* Asegura que se coloca a la derecha del título */
+}
+
+.notify-toggle.hidden {
+    display: none !important;
+}
+
+/* El elemento notify-toggle ya tendrá el estilo base de arriba */
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 10px;
+    background: #E8F5E9;
+    font-size: 1.1em;
+    border-bottom: 2px solid #8BC34A;
+}
+
+.store {
+    padding: 20px;
+    background: #DCEDC8;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    border-bottom: 2px solid #8BC34A;
+}
+
+.seed-card {
+    background: #fff;
+    border: 2px solid #A5D6A7;
+    border-radius: 10px;
+    padding: 10px 15px;
+    width: 150px;
+    text-align: center;
+    box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.seed-card:hover:not(.locked) {
+    transform: translateY(-2px);
+    box-shadow: 3px 5px 8px rgba(0,0,0,0.2);
+}
+
+.seed-card.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: #EF9A9A;
+}
+
+.seed-icon {
+    font-size: 2.5em;
+    margin-bottom: 5px;
+}
+
+.farm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 20px;
+    background: #F1F8E9;
+}
+
+.plot {
+    min-height: 100px;
+    background: #BCAAA4;
+    border: 3px solid #795548;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+    padding: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.plot.locked {
+    background: #CFD8DC;
+    cursor: not-allowed;
+    border-style: dashed;
+    color: #78909C;
+    font-size: 0.8em;
+}
+
+.plant {
+    font-size: 2.5em;
+    margin: 5px 0;
+}
+
+.timer {
+    font-size: 0.7em;
+    color: #333;
+    display: inline-block;
+    min-width: 50px;
+}
+
+.progress-bar {
+    height: 5px;
+    background: #ddd;
+    border-radius: 3px;
+    margin: 4px 8px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: #4CAF50;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.ready {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.harvest-btn {
+    background: #FF5722;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.7em;
+    border-radius: 6px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.auto-harvest {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.8em;
+    background: #2196F3;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 50%;
+}
+
+.controls {
+    padding: 15px 20px;
+    background: #A5D6A7;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    border-top: 2px solid #8BC34A;
+}
+
+.controls button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.controls button:hover:not(:disabled) {
+    background: #388E3C;
+}
+
+.controls button:disabled {
+    background: #BDBDBD;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* --- Registro de Ganancias Flotante AÑADIDO --- */
+.earning-log {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 250px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #388E3C;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.earning-log h4 {
+    margin-bottom: 8px;
+    color: #388E3C;
+    font-size: 1.1em;
+    border-bottom: 1px solid #A5D6A7;
+    padding-bottom: 5px;
+}
+
+#earning-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#earning-list li {
+    padding: 3px 0;
+    font-size: 0.9em;
+    border-bottom: 1px dashed #E0E0E0;
+    color: #5D4037;
+    display: flex;
+    justify-content: space-between;
+}
+
+#earning-list li:last-child {
+    border-bottom: none;
+}
+
+.earning-reward {
+    font-weight: bold;
+    color: #FF9800;
+}

@@ -12,15 +12,16 @@
     <header>
       Granja Automática PRO
       <div class="farmer">🧑‍🌾</div>
+      <!-- <div class="music-toggle" onclick="toggleMusic()">Music Off</div> -->
       <div class="notify-toggle hidden" id="notify-toggle" onclick="toggleLevelUpNotifications()">Notificaciones ON</div>
     </header>
 
     <div class="stats">
       <div>💰 Monedas: <span id="coins">200</span> Coins</div>
       <div>⭐ Nivel: <span id="level">1</span></div>
-      <div>🧑‍🌾 Granjero: Nivel <span id="farmer-level">0</span> (Velocidad: <span id="farmer-speed">0x</span>)</div>
+      <div>🧑‍🌾 Granjero: Nivel <span id="farmer-level">0</span> (Velocidad: <span id="farmer-speed">0%</span>)</div>
       <div>🤖 Auto: <span id="auto-status">OFF</span></div>
-      <div>🔲 Parcelas: <span id="plots-unlocked">5</span>/<span id="plots-total">90</span></div>
+      <div>🔲 Parcelas: <span id="plots-unlocked">5</span>/<span id="plots-total">15</span></div>
     </div>
 
     <div class="store" id="store">
@@ -36,17 +37,15 @@
       <button onclick="unlockPlot()" id="unlock-plot-btn" disabled>Comprar Parcela (Coste: ?)</button>
       <button onclick="resetGame()" style="background: #D32F2F;">Reiniciar Juego</button>
     </div>
-
-    <div class="earning-log">
-        <h3>💰 Ganancias Recientes</h3>
-        <ul id="earning-list">
-            </ul>
-    </div>
-    
   </div>
 
   <audio id="bg-music" loop></audio>
 
+  <div class="earning-log" id="earning-log">
+    <h4>Últimas 5 Cosechas</h4>
+    <ul id="earning-list">
+        </ul>
+  </div>
   <script src="app.js"></script>
 </body>
 </html>

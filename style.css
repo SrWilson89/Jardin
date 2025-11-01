@@ -30,7 +30,6 @@ header {
     font-size: 2.2em;
     text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
     position: relative;
-    /* FLEXBOX para alinear los controles del header */
     display: flex; 
     justify-content: center;
     align-items: center;
@@ -50,22 +49,18 @@ header {
     100% { transform: translateX(0); }
 }
 
-.music-toggle, .notify-toggle {
-    position: relative; 
+.notify-toggle {
     font-size: 0.5em;
     background: #FF9800;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    order: 3; /* Asegura que se coloca a la derecha del título */
 }
 
 .notify-toggle.hidden {
     display: none !important;
 }
-
-/* El elemento notify-toggle ya tendrá el estilo base de arriba */
 
 .stats {
     display: flex;
@@ -237,7 +232,6 @@ header {
     box-shadow: none;
 }
 
-/* --- Registro de Ganancias Flotante AÑADIDO --- */
 .earning-log {
     position: fixed;
     bottom: 20px;
@@ -266,19 +260,28 @@ header {
 }
 
 #earning-list li {
-    padding: 3px 0;
+    padding: 6px 0;
     font-size: 0.9em;
     border-bottom: 1px dashed #E0E0E0;
     color: #5D4037;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 8px;
 }
 
-#earning-list li:last-child {
-    border-bottom: none;
+#earning-list li > div:first-child {
+    flex: 1;
+    text-align: left;
 }
 
 .earning-reward {
     font-weight: bold;
     color: #FF9800;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+#earning-list li:last-child {
+    border-bottom: none;
 }

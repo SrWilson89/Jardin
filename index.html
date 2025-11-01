@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Farmville PRO - Granja Automatizada V2</title>
   <link rel="stylesheet" href="style.css"> 
+  <!-- FAVICON: Planta en la pestaña -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Seedling</text></svg>">
 </head>
 <body>
 
@@ -12,29 +14,26 @@
     <header>
       Granja Automática PRO
       <div class="farmer">🧑‍🌾</div>
-      <!-- <div class="music-toggle" onclick="toggleMusic()">Music Off</div> -->
       <div class="notify-toggle hidden" id="notify-toggle" onclick="toggleLevelUpNotifications()">Notificaciones ON</div>
     </header>
 
     <div class="stats">
-      <div>💰 Monedas: <span id="coins">200</span> Coins</div>
-      <div>⭐ Nivel: <span id="level">1</span></div>
-      <div>🧑‍🌾 Granjero: Nivel <span id="farmer-level">0</span> (Velocidad: <span id="farmer-speed">0%</span>)</div>
-      <div>🤖 Auto: <span id="auto-status">OFF</span></div>
-      <div>🔲 Parcelas: <span id="plots-unlocked">5</span>/<span id="plots-total">15</span></div>
+      <div>Coin Monedas: <span id="coins">200</span> Coins</div>
+      <div>Star Nivel: <span id="level">1</span></div>
+      <div>Farmer Granjero: Nivel <span id="farmer-level">0</span> (Velocidad: <span id="farmer-speed">0%</span>)</div>
+      <div>Robot Auto: <span id="auto-status">OFF</span></div>
+      <div>Square Parcelas: <span id="plots-unlocked">5</span>/<span id="plots-total">90</span></div>
     </div>
 
-    <div class="store" id="store">
-      </div>
+    <div class="store" id="store"></div>
 
-    <div class="farm" id="farm">
-      </div>
+    <div class="farm" id="farm"></div>
 
     <div class="controls">
       <button onclick="hireFarmer()" id="hire-btn">Contratar Granjero (-500 Coins)</button>
-      <button onclick="upgradeFarmer()" id="upgrade-farmer-btn" disabled>Mejorar Granjero (Coste: ?)</button>
+      <button onclick="upgradeFarmer()" id="upgrade-farmer-btn" disabled>Mejorar Granjero</button>
       <button onclick="toggleAuto()" id="auto-btn" disabled>Auto ON/OFF</button>
-      <button onclick="unlockPlot()" id="unlock-plot-btn" disabled>Comprar Parcela (Coste: ?)</button>
+      <button onclick="unlockPlot()" id="unlock-plot-btn">Comprar Parcela</button>
       <button onclick="resetGame()" style="background: #D32F2F;">Reiniciar Juego</button>
     </div>
   </div>
@@ -43,9 +42,9 @@
 
   <div class="earning-log" id="earning-log">
     <h4>Últimas 5 Cosechas</h4>
-    <ul id="earning-list">
-        </ul>
+    <ul id="earning-list"></ul>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>

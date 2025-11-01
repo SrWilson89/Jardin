@@ -12,7 +12,7 @@ let state = {
     plotsUnlocked: 5, 
     plots: [],
     levelUpNotifications: true,
-    lastEarnings: [] // <-- AÑADIDO: Registro de ganancias
+    lastEarnings: []
 };
 
 // Elementos
@@ -31,7 +31,7 @@ const plotsUnlockedEl = document.getElementById('plots-unlocked');
 const plotsTotalEl = document.getElementById('plots-total');
 const music = document.getElementById('bg-music');
 const notifyToggleEl = document.getElementById('notify-toggle'); 
-const earningListEl = document.getElementById('earning-list'); // <-- AÑADIDO: Elemento de lista
+const earningListEl = document.getElementById('earning-list');
 let autoInterval;
 
 // === INICIALIZACIÓN Y CARGA DE DATOS ===
@@ -42,7 +42,6 @@ async function loadConfig() {
         if (!response.ok) throw new Error('No se pudo cargar config.json');
         const data = await response.json();
         
-        // Asignar los datos del JSON a las variables globales
         CONFIG = data;
         SEEDS = data.SEEDS;
         FARMER_CONFIG = data.FARMER_CONFIG;
@@ -58,7 +57,6 @@ async function loadConfig() {
     }
 }
 
-
 // Cargar progreso
 function loadGame() {
     const saved = localStorage.getItem('farmville_pro');
@@ -68,9 +66,8 @@ function loadGame() {
             ...state,
             ...parsedState,
             plotsUnlocked: parsedState.plotsUnlocked || 5,
-            // Asegurar que las nuevas variables existen
             levelUpNotifications: parsedState.levelUpNotifications !== undefined ? parsedState.levelUpNotifications : true,
-            lastEarnings: parsedState.lastEarnings || [] // <-- AÑADIDO: Cargar o inicializar
+            lastEarnings: parsedState.lastEarnings || []
         };
     }
     plotsTotalEl.textContent = CONFIG.PLOTS_TOTAL; 
@@ -147,8 +144,7 @@ function initFarm() {
 
         if (i >= state.plotsUnlocked) {
             plot.className = 'plot locked';
-            // getPlotUnlockCost(i) es incorrecto, debería ser el coste
-            plot.textContent = `Bloqueada: Nivel ${i*2}+`; // Mejor dejar un valor de referencia o quitar el texto si es confuso.
+            plot.textContent = `Bloqueada: Nivel ${i*2}+`;
         } else {
             if (state.plots[i].status === 'growing') {
                 continueGrowth(i);
@@ -221,41 +217,32 @@ function finishGrowth(index) {
     updatePlot(index);
 }
 
-// FUNCIÓN HARVEST CON LÓGICA DE RECOMPENSA MEJORADA
+// FUNCIÓN HARVEST MEJORADA
 function harvest(index) {
     const plot = state.plots[index];
     if (plot.status !== 'ready') return;
 
-    // 1. Obtener valores necesarios
     const baseReward = plot.seed.reward;
     const playerLevel = state.level;
     const farmerLevel = state.farmerLevel;
-    
-    // 2. Calcular el multiplicador del granjero (lvl 1 = 1.1, lvl 2 = 1.2, etc.)
-    const farmerMultiplier = 1.0 + (farmerLevel / 10); 
+    const farmerMultiplier = 1.0 + (farmerLevel / 10);
+    const totalReward = Math.round((baseReward + playerLevel) * farmerMultiplier);
 
-    // 3. Calcular la recompensa total con la nueva fórmula: (Valor base + Nivel del Personaje) * Multiplicador del Granjero
-    const totalReward = Math.round((baseReward + playerLevel) * farmerMultiplier); 
-
-    // 4. Aplicar la recompensa y subir de nivel
     state.coins += totalReward;
-    levelUp();
-    
-    // 4.1. Registrar la ganancia (NUEVO CÓDIGO)
+
     const logEntry = {
         name: plot.seed.name,
         icon: plot.seed.icon,
         reward: totalReward,
+        balance: state.coins,
         timestamp: Date.now()
     };
     
-    // Añadir al principio y mantener solo las últimas 5
     state.lastEarnings.unshift(logEntry);
     if (state.lastEarnings.length > 5) {
         state.lastEarnings.pop();
     }
     
-    // 5. Resetear la parcela
     plot.status = 'empty';
     plot.seed = null; 
     plot.plantTime = null;
@@ -263,6 +250,7 @@ function harvest(index) {
     
     updatePlot(index);
     updateUI();
+    levelUp();
 }
 
 function manualHarvest(index) {
@@ -280,7 +268,7 @@ function updatePlot(index) {
     el.className = 'plot'; 
     
     if (plot.status === 'empty') {
-        el.innerHTML = `<div style="color:#aaa; margin-top:30px;">🌱</div>`;
+        el.innerHTML = `<div style="color:#aaa; margin-top:30px;">Seedling</div>`;
     } else if (plot.status === 'ready') {
         el.innerHTML = `
           <div class="plant ready">${plot.seed.icon}</div>
@@ -295,8 +283,7 @@ function updatePlot(index) {
 // === GRANJERO AUTOMÁTICO Y MEJORAS ===
 function getPlotUnlockCost(unlocked) {
     if (unlocked >= CONFIG.PLOTS_TOTAL) return Infinity;
-    // La fórmula de coste empieza a partir de la 6ta parcela (índice 5)
-    return 1000 + Math.max(0, unlocked - 5) * 200; // Restaurado a 500 basado en tu lógica original de coste de parcelas.
+    return 1000 + Math.max(0, unlocked - 5) * 200;
 }
 
 function unlockPlot() {
@@ -315,7 +302,6 @@ function unlockPlot() {
     initFarm(); 
     updateUI();
 }
-
 
 function hireFarmer() {
     const config = getFarmerConfig(1);
@@ -372,7 +358,6 @@ function startAutoFarmer() {
     if (autoInterval) clearInterval(autoInterval); 
     
     autoInterval = setInterval(() => {
-        // Cosechar automáticamente
         state.plots.slice(0, state.plotsUnlocked).forEach((plot, i) => {
             if (plot.status === 'ready') {
                 harvest(i); 
@@ -380,17 +365,19 @@ function startAutoFarmer() {
             }
         });
         
-        // Plantar en parcelas vacías
         const emptyPlots = state.plots.slice(0, state.plotsUnlocked).filter(p => p.status === 'empty');
-        if (emptyPlots.length > 0) {
+        if (emptyPlots.length > 0 && state.coins > 0) {
             
-            // Lógica para elegir la semilla con la MÁXIMA RECOMPENSA (rentabilidad)
-            const bestSeed = SEEDS
-                .filter(s => s.farmerLvl <= config.maxSeedLevel) 
-                .sort((a, b) => b.reward - a.reward) // <-- Ordena por recompensa más alta
-                .find(s => state.coins >= s.cost);
-                
-            if (bestSeed) {
+            const affordableSeeds = SEEDS
+                .filter(s => state.coins >= s.cost && state.level >= s.level);
+
+            if (affordableSeeds.length > 0) {
+                const bestSeed = affordableSeeds.reduce((best, current) => {
+                    const bestRatio = best.reward / best.time;
+                    const currRatio = current.reward / current.time;
+                    return currRatio > bestRatio ? current : best;
+                });
+
                 const idx = state.plots.indexOf(emptyPlots[0]);
                 state.coins -= bestSeed.cost;
                 plantCrop(idx, bestSeed);
@@ -403,22 +390,17 @@ function startAutoFarmer() {
 // === PROGRESIÓN Y UI ===
 function levelUp() {
     const oldLevel = state.level;
-    const newLevel = Math.floor(state.coins / 150) + 1; // Fórmula de nivel simple
+    const newLevel = Math.floor(state.coins / 150) + 1;
     
     if (newLevel > oldLevel) {
         state.level = newLevel;
         
-        // 1. Mostrar la notificación si está activa Y el nivel es menor a 20
         if (state.levelUpNotifications && state.level < 20) {
             alert(`¡Subiste al nivel ${state.level}! Nuevas semillas desbloqueadas.`);
         }
         
-        // 2. Si se alcanza el Nivel 20 (y venías de un nivel inferior)
-        if (state.level >= 20 && oldLevel < 20) {
-            // Mostrar un mensaje especial si la notificación estaba activa
-            if (state.levelUpNotifications) {
-                 alert(`¡Subiste al nivel ${state.level}! ¡El tope de notificaciones se ha alcanzado! Ahora puedes desactivarlas.`);
-            }
+        if (state.level >= 20 && oldLevel < 20 && state.levelUpNotifications) {
+            alert(`¡Subiste al nivel ${state.level}! ¡El tope de notificaciones se ha alcanzado!`);
         }
         
         initStore();
@@ -426,7 +408,6 @@ function levelUp() {
     updateUI();
 }
 
-// FUNCIÓN PARA RENDERIZAR EL REGISTRO DE GANANCIAS (AÑADIDO)
 function renderEarningsLog() {
     earningListEl.innerHTML = '';
     
@@ -438,7 +419,6 @@ function renderEarningsLog() {
     state.lastEarnings.forEach(log => {
         const li = document.createElement('li');
         
-        // Formatear la hora
         const time = new Date(log.timestamp).toLocaleTimeString('es-ES', {
             hour: '2-digit', 
             minute:'2-digit',
@@ -446,15 +426,16 @@ function renderEarningsLog() {
         });
         
         li.innerHTML = `
-            <div>${log.icon} ${log.name}</div> 
-            <div class="earning-reward">+${log.reward}C (${time})</div>
+            <div>
+                <span>${log.icon} ${log.name}</span>
+                <small style="color:#777; display:block;">+${log.reward}C → Coin ${log.balance}C</small>
+            </div>
+            <div class="earning-reward">${time}</div>
         `;
         earningListEl.appendChild(li);
     });
 }
 
-
-// FUNCIÓN PARA DESACTIVAR NOTIFICACIONES
 function toggleLevelUpNotifications() {
     state.levelUpNotifications = !state.levelUpNotifications;
     updateUI();
@@ -465,7 +446,6 @@ function updateUI() {
     const nextFarmerConfig = getNextFarmerConfig();
     const unlockCost = getPlotUnlockCost(state.plotsUnlocked);
     
-    // Stats
     coinsEl.textContent = state.coins;
     levelEl.textContent = state.level;
     farmerLevelEl.textContent = state.farmerLevel;
@@ -473,7 +453,6 @@ function updateUI() {
     autoStatusEl.textContent = state.autoMode ? 'ON' : 'OFF';
     plotsUnlockedEl.textContent = state.plotsUnlocked;
 
-    // Botones
     hireBtn.disabled = state.farmerLevel > 0 || state.coins < CONFIG.FARMER_BASE_COST;
     
     upgradeFarmerBtn.disabled = state.farmerLevel === 0 || !nextFarmerConfig || state.coins < nextFarmerConfig.cost;
@@ -489,39 +468,18 @@ function updateUI() {
         ? 'Todas desbloqueadas' 
         : `Comprar Parcela (-${unlockCost} C)`;
         
-    // Lógica para el botón de notificaciones
     if (state.level >= 20) {
-        // Mostrar el botón
         notifyToggleEl.classList.remove('hidden');
         notifyToggleEl.textContent = state.levelUpNotifications ? 'Notificaciones ON' : 'Notificaciones OFF';
-        // Se puede añadir estilo inline aquí si no funciona solo con CSS
     } else {
-        // Ocultar el botón
         notifyToggleEl.classList.add('hidden');
     }
 
     saveGame();
     initStore();
-    renderEarningsLog(); // <-- AÑADIDO: Renderizar el log de ganancias
+    renderEarningsLog();
 }
 
-// === MÚSICA ===
-function toggleMusic() {
-    const musicToggleEl = document.querySelector('.music-toggle');
-    if (music.paused) {
-        if (music.src) { 
-            music.play().catch(() => {});
-            musicToggleEl.textContent = 'Music On';
-        } else {
-            alert("No hay URL de música configurada.");
-        }
-    } else {
-        music.pause();
-        musicToggleEl.textContent = 'Music Off';
-    }
-}
-
-// FUNCIÓN DE REINICIO AÑADIDA
 function resetGame() {
     if (confirm("¿Estás seguro de que quieres REINICIAR el juego? Perderás todo tu progreso.")) {
         localStorage.removeItem('farmville_pro');
@@ -529,7 +487,6 @@ function resetGame() {
     }
 }
 
-// Iniciar
 window.onload = () => {
     loadConfig(); 
     music.volume = 0.3;

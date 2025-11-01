@@ -296,7 +296,7 @@ function updatePlot(index) {
 function getPlotUnlockCost(unlocked) {
     if (unlocked >= CONFIG.PLOTS_TOTAL) return Infinity;
     // La fórmula de coste empieza a partir de la 6ta parcela (índice 5)
-    return 1000 + Math.max(0, unlocked - 5) * 500; // Restaurado a 500 basado en tu lógica original de coste de parcelas.
+    return 1000 + Math.max(0, unlocked - 5) * 200; // Restaurado a 500 basado en tu lógica original de coste de parcelas.
 }
 
 function unlockPlot() {
